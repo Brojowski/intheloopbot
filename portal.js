@@ -3,6 +3,7 @@ module.exports = function(socket, reddit) {
     const tokenizer = require('./tokenizer')(reddit);
     const topicSearch = require('./topicSearch')(reddit); 
 
+    // find top words in a subreddit
     socket.on('subreddit_name_update', (subRedditName) => {
         console.log('subreddit_name_update: ' + subRedditName);
 
@@ -14,6 +15,7 @@ module.exports = function(socket, reddit) {
         });
     });
 
+    // find top subreddits based on word/phrase
     socket.on('topic_search', (topic) => {
         console.log('topic_search: ' + topic);
         topicSearch.searchTopic(topic, (subredditHeatmap) => {

@@ -11,6 +11,15 @@ module.exports.projectRoot = projectRoot;
 
 const reddit = new snoowrap(config);
 
+// get top posts from subreddit
+// reddit.getSubreddit('doggos').getTop().map(post => post.title).then(console.log);
+
+// get top posts via a search
+/* reddit.search({
+    query: queryTopic,
+    sort: 'top'
+}).map(post => post.title).then(console.log); */
+
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {

@@ -35,6 +35,12 @@
             <input type="text" id="subredditNameField" />
             <br>
             <button id="subredditSubmit" onclick="updateFromClick()">Check This Subreddit!</button>
+            <br>
+            <span>Or, search a word/phrase and check it's popularity on Reddit!</span>
+            <br>
+            <input type="text" id="queryPhrase" />
+            <br>
+            <button id="querySubmit" onclick="searchFromClick()">Check this phrase!</button>
         </div>
     
         <div class="chartContainer boxShadow" >
@@ -58,25 +64,25 @@
                 data: subredditData.hits
             });
         })
-
         function updateFromClick()
         {
             var subredditName = document.getElementById('subredditNameField').value;
             updateSubReddit(subredditName);
         }
-
+        function searchFromClick()
+        {
+            var queryPhrase = document.getElementById('queryPhrase').value;
+            updateTopic(queryPhrase);
+        }
         updateSubReddit('all');
-
         function updateSubReddit(subreddit)
         {
             socket.emit('subreddit_name_update', subreddit);
         }
-
         function updateTopic(topic)
         {
             socket.emit('topic_search', topic);
         }
-
         function drawChart(displayPair)
         {
             if (myChart) myChart.destroy();
