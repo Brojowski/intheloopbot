@@ -11,8 +11,6 @@ module.exports.projectRoot = projectRoot;
 
 const reddit = new snoowrap(config);
 
-//reddit.getHot().map(post => post.title).then(console.log);
-reddit.getSubreddit('Dogberg').getHot().map(data => data.score).then(console.log);
 
 app.use(express.static('public'));
 
@@ -24,8 +22,12 @@ app.get('/socket.io/socket.io.js', (req, res) => {
     res.sendFile('./node_modules/socket.io-client/dist/socket.io.js', { root: projectRoot });
 });
 
+app.get('/chart-js/chart.js', (req, res) => {
+    res.sendFile('./node_modules/chart.js/dist/Chart.js', { root : projectRoot });
+});
+
 io.on('connection', (socket) => {
-    portal(socket);
+    portal(socket, reddit);
 });
 
 server.listen(8080, () => console.log('Server started'));
