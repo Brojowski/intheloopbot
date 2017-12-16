@@ -48,7 +48,7 @@ html {
     padding-left: 20px;
     padding-right: 20px;
     margin-left: 10px;
-    width: 600px;
+    width: 604px;
 }
 
 #graphContent {
@@ -62,7 +62,7 @@ html {
 #searchBar {
     font-size: 12px;
     width: 200px;
-    height: 30%;
+    height: 380px;
     padding: 10px;
     margin: 10px;
     background: #D6E4F0;
