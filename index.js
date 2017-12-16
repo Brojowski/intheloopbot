@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
+var portal = require('./portal');
 var io = require('socket.io')(server);
 var snoowrap = require('snoowrap');
 const config = require('./config/config.js').config;
@@ -13,7 +14,7 @@ const reddit = new snoowrap(config);
 //reddit.getHot().map(post => post.title).then(console.log);
 reddit.getSubreddit('Dogberg').getHot().map(data => data.score).then(console.log);
 
-app.use(express.static('static'));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.sendFile('./public/index.html', { root: projectRoot });
@@ -24,10 +25,7 @@ app.get('/socket.io/socket.io.js', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-      console.log(data);
-    });
+    portal(socket);
 });
 
 server.listen(8080, () => console.log('Server started'));
