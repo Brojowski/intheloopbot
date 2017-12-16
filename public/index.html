@@ -43,16 +43,21 @@
             </canvas>
         </div>
     </div>
-  
-  
-  
     <script>
         var myChart;
         var socket = io.connect('http://localhost:8080');
         socket.on('summarize_subreddit', (topicsData) => {
-            console.log(topicsData)
-            drawChart(topicsData);
+            drawChart({
+                labels: topicsData.topics,
+                data: topicsData.frequency
+            });
         });
+        socket.on('topic_activity_by_subreddit', (subredditData) => {
+            drawChart({
+                labels: subredditData.subreddits,
+                data: subredditData.hits
+            });
+        })
 
         function updateFromClick()
         {
@@ -67,21 +72,38 @@
             socket.emit('subreddit_name_update', subreddit);
         }
 
-        function drawChart( topicsData)
+        function updateTopic(topic)
+        {
+            socket.emit('topic_search', topic);
+        }
+
+        function drawChart(displayPair)
         {
             if (myChart) myChart.destroy();
-            var ctx = document.getElementById("myChart").getContext('2d');
+            var ctx = document.getElementById('myChart');
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: topicsData.topics,
+                    labels: displayPair.labels,
                     datasets: [{
-                        label: 'Top Word Frequencies',
-                        data: topicsData.frequency,
-                        borderWidth: 1
+                        label: 'Word Frequency',
+                        data: displayPair.data,
+                        borderWidth: 1,
+                        backgroundColor: '#4f8ff7',
+                        hoverBackgroundColor: '#7caeff'
                     }]
                 },
                 options: {
+                    title:{
+                        display: true,
+                        text: 'Top Word Frequencies',
+                        fontSize: 25
+                    },
+                    legend:{
+                        position: 'right'
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         yAxes: [{
                             ticks: {

@@ -11,7 +11,6 @@ module.exports.projectRoot = projectRoot;
 
 const reddit = new snoowrap(config);
 
-
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
