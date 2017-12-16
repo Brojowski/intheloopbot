@@ -35,6 +35,12 @@
             <input type="text" id="subredditNameField" />
             <br>
             <button id="subredditSubmit" onclick="updateFromClick()">Check This Subreddit!</button>
+            <br>
+            <span>Or, search a word/phrase and check it's popularity on Reddit!</span>
+            <br>
+            <input type="text" id="queryPhrase" />
+            <br>
+            <button id="querySubmit" onclick="searchFromClick()">Check this phrase!</button>
         </div>
     
         <div class="chartContainer boxShadow" >
@@ -62,6 +68,11 @@
         {
             var subredditName = document.getElementById('subredditNameField').value;
             updateSubReddit(subredditName);
+        }
+        function searchFromClick()
+        {
+            var queryPhrase = document.getElementById('queryPhrase').value;
+            updateTopic(queryPhrase);
         }
         updateSubReddit('all');
         function updateSubReddit(subreddit)
