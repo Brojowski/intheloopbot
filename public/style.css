@@ -62,7 +62,7 @@ html {
 #searchBar {
     font-size: 12px;
     width: 200px;
-    height: 200px;
+    height: 30%;
     padding: 10px;
     margin: 10px;
     background: #D6E4F0;
@@ -84,5 +84,13 @@ html {
     margin: 5px;
 }
 #subredditSubmit {
+    margin: 5px;
+}
+
+#queryPhrase {
+    margin: 5px;
+}
+
+#querySubmit {
     margin: 5px;
 }
