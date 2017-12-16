@@ -5,6 +5,7 @@ module.exports = function(socket, reddit) {
     socket.on('subreddit_name_update', (subRedditName) => {
         console.log('subreddit_name_update: ' + subRedditName);
 
+        // find top words in a subreddit
         tokenizer.findTopWords(subRedditName, (words, freq) => {
             console.log(words);
             socket.emit('summarize_subreddit', {
