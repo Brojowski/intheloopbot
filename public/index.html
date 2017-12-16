@@ -1,64 +1,79 @@
 <html>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/chart-js/chart.js"></script>
+    <script src="style.css"></script>
     <body>
-        <!-- Display Top Posts -->
-        <input type="text" id="queryTopic" />
-        <input type="button" onclick="search" />
-        <script>
-            
-        </script>
-
-        <!-- Chart.js -->
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/chart-js/chart.js"></script>
-        <input type="text" id="subredditNameField" />
-        <input type="button" onclick="updateFromClick()" />
-        <canvas id="myChart" width="400" height="400"></canvas>
-        <script>
-            var myChart;
-            var socket = io.connect('http://localhost:8080');
-            socket.on('summarize_subreddit', (topicsData) => {
-                console.log(topicsData)
-                drawChart(topicsData);
-            });
-
-            function updateFromClick()
-            {
-                var subredditName = document.getElementById('subredditNameField').value;
-                updateSubReddit(subredditName);
-            }
-
-            updateSubReddit('all');
-
-            function updateSubReddit(subreddit)
-            {
-                socket.emit('subreddit_name_update', subreddit);
-            }
-
-            function drawChart( topicsData)
-            {
-                if (myChart) myChart.destroy();
-                var ctx = document.getElementById("myChart").getContext('2d');
-                myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: topicsData.topics,
-                        datasets: [{
-                            label: 'Top Word Frequencies',
-                            data: topicsData.frequency,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero:true
-                                }
-                            }]
-                        }
-                    }
-                });
-            }
-        </script>
+    <input type="text" id="subredditNameField" />
+    <input type="button" onclick="updateFromClick()" />
+        <div style="max-width:1100px; max-height:400px;">
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
     </body>
+    <script>
+        var myChart;
+        var socket = io.connect('http://localhost:8080');
+        socket.on('summarize_subreddit', (topicsData) => {
+            drawChart({
+                labels: topicsData.topics,
+                data: topicsData.frequency
+            });
+        });
+        socket.on('topic_activity_by_subreddit', (subredditData) => {
+            drawChart({
+                labels: subredditData.subreddits,
+                data: subredditData.hits
+            });
+        })
+        function updateFromClick()
+        {
+            var subredditName = document.getElementById('subredditNameField').value;
+            updateSubReddit(subredditName);
+        }
+        updateSubReddit('all');
+        function updateSubReddit(subreddit)
+        {
+            socket.emit('subreddit_name_update', subreddit);
+        }
+        function updateTopic(topic)
+        {
+            socket.emit('topic_search', topic);
+        }
+        function drawChart(displayPair)
+        {
+            if (myChart) myChart.destroy();
+            var ctx = document.getElementById('myChart');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: displayPair.labels,
+                    datasets: [{
+                        label: 'Word Frequency',
+                        data: displayPair.data,
+                        borderWidth: 1,
+                        backgroundColor: '#4f8ff7',
+                        hoverBackgroundColor: '#7caeff'
+                    }]
+                },
+                options: {
+                    title:{
+                        display: true,
+                        text: 'Top Word Frequencies',
+                        fontSize: 25
+                    },
+                    legend:{
+                        position: 'right'
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    </script>
 </html>
