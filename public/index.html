@@ -1,14 +1,48 @@
 <html>
+    
+<!-- To add more charts, you can use the chartContainer class. 
+    The canvas defaults to expand to as large as it can get, 
+    so we can just surround it by a container to limit how big it can get,
+    so we can display more than one at once. -->
+    
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chart-js/chart.js"></script>
-    <script src="style.css"></script>
-    <body>
-    <input type="text" id="subredditNameField" />
-    <input type="button" onclick="updateFromClick()" />
-        <div style="max-width:1100px; max-height:400px;">
-            <canvas id="myChart" width="400" height="400"></canvas>
+  
+    <link href="style.css" rel="stylesheet">
+  
+  
+    <div id="title">
+        <h1 id="mainTitle">IN THE LOOP</h1>
+        <h3 id="subTitle" class="pinkText">STAY IN THE LOOP WITH YOUR FAVORITE SUBREDDITS</h3>
+    </div>
+    <div id="titlePadding">
+        <!-- This just lets the absolute-positioned div above take up space naturally on the page-->
+    </div>
+    
+    <div id="description" class="boxShadow">
+            <p>Subreddits are a great way for people with common interests to get together and share ideas, creations, and more!</p>
+            <p>At <span class="pinkText">In The Loop</span>, we want to help those communities learn more about themselves via statistics, so they can improve their communities. </p>
+            
+            
         </div>
-    </body>
+    <div id="graphContent">
+        <div id="searchBar" class="boxShadow">
+            <span>Enter your favorite subreddit below to see stats about that subreddit!</span><br><br>
+            <span>For example, to check stats on /r/TsundereSharks/ , enter 
+                <span class="pinkText">TsundereSharks</span> and hit the button.
+            </span>
+            <br>
+            <input type="text" id="subredditNameField" />
+            <br>
+            <button id="subredditSubmit" onclick="updateFromClick()">Check This Subreddit!</button>
+        </div>
+    
+        <div class="chartContainer boxShadow" >
+            <canvas id="myChart" class="chart" width="400" height="400">
+                Your browser doesn't support our charts :( sorry!!
+            </canvas>
+        </div>
+    </div>
     <script>
         var myChart;
         var socket = io.connect('http://localhost:8080');
