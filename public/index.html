@@ -38,7 +38,7 @@
                         document.getElementById('subredditSubmit').click()" 
              />
             <br>
-            <button id="subredditSubmit" onclick="updateFromClick()">Check This Subreddit!</button>
+            <button id="subredditSubmit" onclick="updateFromClick()">Check Out This Subreddit!</button>
             <br>
             <span>Or, search a word/phrase and check it's popularity on Reddit!</span>
             <br>
@@ -48,7 +48,17 @@
                         document.getElementById('querySubmit').click()" 
             />
             <br>
-            <button id="querySubmit" onclick="searchFromClick()">Check this phrase!</button>
+            <button id="querySubmit" onclick="searchFromClick()">Search this phrase!</button>
+            <br>
+            <span>View user interactions.</span>
+            <br>
+            <input type="text" 
+            id="userQuery" 
+            onkeyup = "if (event.keyCode == 13)
+                        document.getElementById('userSubmit').click()" 
+            />
+            <br>
+            <button id="userSubmit" onclick="userQueryClick()">View User Activity!</button>
         </div>
 
         <div id ="top-posts" class="boxShadow">
@@ -140,7 +150,19 @@
                 data: subredditData.hits
             });
         });
-
+        socket.on('getTitlesByTopic', (data) => {
+            document.getElementById('post-title').innerHTML = data[0];
+            document.getElementById('post-title2').innerHTML = data[1];
+            document.getElementById('post-title3').innerHTML = data[2];
+            document.getElementById('post-title4').innerHTML = data[3];
+            document.getElementById('post-title5').innerHTML = data[4];
+        });
+        socket.on('user_sub_data',userData => {
+            drawChart({
+                labels: userData.subreddits,
+                data: userData.hits
+            })
+        })
         function updateFromClick()
         {
             var subredditName = document.getElementById('subredditNameField').value;
@@ -151,6 +173,10 @@
             var queryPhrase = document.getElementById('queryPhrase').value;
             updateTopic(queryPhrase);
         }
+        function userQueryClick() {
+            var userQuery = document.getElementById('userQuery').value;
+            updateUser(userQuery)
+        }
         updateSubReddit('all');
         function updateSubReddit(subreddit)
         {
@@ -159,6 +185,9 @@
         function updateTopic(topic)
         {
             socket.emit('topic_search', topic);
+        }
+        function updateUser(username) {
+            socket.emit('get_user_data', username);
         }
         function drawChart(displayPair)
         {

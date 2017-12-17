@@ -2,6 +2,7 @@
 module.exports = function(socket, reddit) {
     const tokenizer = require('./tokenizer')(reddit);
     const topicSearch = require('./topicSearch')(reddit); 
+    const userSearch = require('./userInfo')(reddit);
 
     // search via subreddit name
     socket.on('subreddit_name_update', (subRedditName) => {
@@ -52,5 +53,13 @@ module.exports = function(socket, reddit) {
         .then( (data) => {
             socket.emit('getLinksByTopic', data);
         }); 
+    });
+
+    socket.on('get_user_data', (username) => {
+        console.log('get_user_data: ' + username);
+
+        userSearch.getUserData(username, data => {
+            socket.emit('user_sub_data', data);
+        });
     });
 }
