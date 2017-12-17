@@ -94,6 +94,19 @@ html {
     margin: 10px;
 }
 
+.fullscreenChart {
+    position: fixed;
+    z-index: 10;
+    width: 60%;
+    height: 60%;
+    border: solid #1E56A0 2px;
+    margin: 10px;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+}
+
 #subredditNameField {
     margin: 5px;
 }

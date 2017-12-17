@@ -75,8 +75,8 @@
             <span id="post-link5" class="top-post-titles"></span>
         </div>
     
-        <div class="chartContainer boxShadow" >
-            <canvas id="myChart" class="chart" width="400" height="400">
+        <div class="chartContainer boxShadow" id="graphContainer" >
+            <canvas id="myChart" class="chart" width="400" height="400" onclick="toggleGraphSize()">
                 Your browser doesn't support our charts :( sorry!!
             </canvas>
         </div>
@@ -84,6 +84,19 @@
 
     <!-- All the JS for Chart.js and Display content -->
     <script>
+        var fullscreen = false;
+        function toggleGraphSize() {
+            var chartHolder = document.getElementById('graphContainer').classList;
+            if (!fullscreen) {
+                chartHolder.remove('chartContainer');
+                chartHolder.add('fullscreenChart');
+            } else {
+                chartHolder.remove('fullscreenChart');
+                chartHolder.add('chartContainer');
+            }
+            fullscreen = !fullscreen;
+        }
+
         var socket = io.connect('http://localhost:8080');
         
         // gets top posts and makes them links to the corresponding reddit post. its a mess, i know.
