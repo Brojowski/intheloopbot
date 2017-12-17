@@ -32,13 +32,21 @@
                 <span class="pinkText">TsundereSharks</span> and hit the button.
             </span>
             <br>
-            <input type="text" id="subredditNameField" />
+            <input type="text"
+             id="subredditNameField"
+             onkeyup = "if (event.keyCode == 13)
+                        document.getElementById('subredditSubmit').click()" 
+             />
             <br>
             <button id="subredditSubmit" onclick="updateFromClick()">Check This Subreddit!</button>
             <br>
             <span>Or, search a word/phrase and check it's popularity on Reddit!</span>
             <br>
-            <input type="text" id="queryPhrase" />
+            <input type="text" 
+            id="queryPhrase" 
+            onkeyup = "if (event.keyCode == 13)
+                        document.getElementById('querySubmit').click()" 
+            />
             <br>
             <button id="querySubmit" onclick="searchFromClick()">Check this phrase!</button>
         </div>
@@ -122,7 +130,6 @@
                 data: {
                     labels: displayPair.labels,
                     datasets: [{
-                        label: 'Word Frequency',
                         data: displayPair.data,
                         borderWidth: 1,
                         backgroundColor: '#4f8ff7',
