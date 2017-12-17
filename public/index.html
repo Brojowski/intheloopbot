@@ -54,15 +54,15 @@
         <div id ="top-posts" class="boxShadow">
             <span><b>Top Posts</b></span>
             <br><br>
-            <span id="post-title" class="top-post-titles"></span>
+            <span id="post-link" class="top-post-titles"></span>
             <br><br>
-            <span id="post-title2" class="top-post-titles"></span>
+            <span id="post-link2" class="top-post-titles"></span>
             <br><br>
-            <span id="post-title3" class="top-post-titles"></span>
+            <span id="post-link3" class="top-post-titles"></span>
             <br><br>
-            <span id="post-title4" class="top-post-titles"></span>
+            <span id="post-link4" class="top-post-titles"></span>
             <br><br>
-            <span id="post-title5" class="top-post-titles"></span>
+            <span id="post-link5" class="top-post-titles"></span>
         </div>
     
         <div class="chartContainer boxShadow" >
@@ -74,20 +74,65 @@
 
     <!-- All the JS for Chart.js and Display content -->
     <script>
-        var myChart;
         var socket = io.connect('http://localhost:8080');
+        
+        // gets top posts and makes them links to the corresponding reddit post. its a mess, i know.
+        socket.on('getLinksBySub', (data) => {
+            var link = "http://www.reddit.com" + data[0];
+            document.getElementById('post-link').innerHTML = "<a href=" + link + "><span id=\"post-title\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[1];
+            document.getElementById('post-link2').innerHTML = "<a href=" + link + "><span id=\"post-title2\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[2];
+            document.getElementById('post-link3').innerHTML = "<a href=" + link + "><span id=\"post-title3\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[3];
+            document.getElementById('post-link4').innerHTML = "<a href=" + link + "><span id=\"post-title4\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[4];
+            document.getElementById('post-link5').innerHTML = "<a href=" + link + "><span id=\"post-title5\"></span></a>";
+
+            socket.on('getTitles', (data) => {
+                document.getElementById('post-title').innerHTML = data[0];
+                document.getElementById('post-title2').innerHTML = data[1];
+                document.getElementById('post-title3').innerHTML = data[2];
+                document.getElementById('post-title4').innerHTML = data[3];
+                document.getElementById('post-title5').innerHTML = data[4];
+            });
+        }); 
+        socket.on('getLinksByTopic', (data) => {
+            var link = "http://www.reddit.com" + data[0];
+            document.getElementById('post-link').innerHTML = "<a href=" + link + "><span id=\"post-title\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[1];
+            document.getElementById('post-link2').innerHTML = "<a href=" + link + "><span id=\"post-title2\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[2];
+            document.getElementById('post-link3').innerHTML = "<a href=" + link + "><span id=\"post-title3\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[3];
+            document.getElementById('post-link4').innerHTML = "<a href=" + link + "><span id=\"post-title4\"></span></a>";
+
+            var link = "http://www.reddit.com" + data[4];
+            document.getElementById('post-link5').innerHTML = "<a href=" + link + "><span id=\"post-title5\"></span></a>";
+
+            socket.on('getTitlesByTopic', (data) => {
+                document.getElementById('post-title').innerHTML = data[0];
+                document.getElementById('post-title2').innerHTML = data[1];
+                document.getElementById('post-title3').innerHTML = data[2];
+                document.getElementById('post-title4').innerHTML = data[3];
+                document.getElementById('post-title5').innerHTML = data[4];
+            });
+        });
+
+        // draw chart
+        var myChart;
         socket.on('summarize_subreddit', (topicsData) => {
             drawChart({
                 labels: topicsData.topics,
                 data: topicsData.frequency
             });     
-        });
-        socket.on('getTitles', (data) => {
-            document.getElementById('post-title').innerHTML = data[0];
-            document.getElementById('post-title2').innerHTML = data[1];
-            document.getElementById('post-title3').innerHTML = data[2];
-            document.getElementById('post-title4').innerHTML = data[3];
-            document.getElementById('post-title5').innerHTML = data[4];
         });
         socket.on('topic_activity_by_subreddit', (subredditData) => {
             drawChart({
@@ -95,13 +140,7 @@
                 data: subredditData.hits
             });
         });
-        socket.on('getTitlesByTopic', (data) => {
-            document.getElementById('post-title').innerHTML = data[0];
-            document.getElementById('post-title2').innerHTML = data[1];
-            document.getElementById('post-title3').innerHTML = data[2];
-            document.getElementById('post-title4').innerHTML = data[3];
-            document.getElementById('post-title5').innerHTML = data[4];
-        });
+
         function updateFromClick()
         {
             var subredditName = document.getElementById('subredditNameField').value;

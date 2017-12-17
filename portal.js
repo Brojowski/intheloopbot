@@ -19,6 +19,11 @@ module.exports = function(socket, reddit) {
         reddit.getSubreddit(subRedditName).getTop().map(post => post.title).then( (data) => {
             socket.emit('getTitles', data);
         });
+
+        // get perma link for top posts
+        reddit.getSubreddit(subRedditName).getTop().map(post => post.permalink).then( (data) => {
+            socket.emit('getLinksBySub', data);
+        });
     });
 
     // search via word/phrase
@@ -37,6 +42,15 @@ module.exports = function(socket, reddit) {
         }).map(post => post.title)
         .then( (data) => {
             socket.emit('getTitlesByTopic', data);
+        }); 
+
+        // get perma link for top posts
+        reddit.search({
+            query: topic,
+            sort: 'top'
+        }).map(post => post.permalink)
+        .then( (data) => {
+            socket.emit('getLinksByTopic', data);
         }); 
     });
 }
