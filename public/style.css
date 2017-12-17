@@ -80,7 +80,9 @@ html {
 }
 
 .top-post-titles {
+    text-align: center;
     font-size: 14px;
+    margin-top: 10px;
 }
 
 .chart {
@@ -106,5 +108,13 @@ html {
 }
 
 #querySubmit {
+    margin: 5px;
+}
+
+#userQuery {
+    margin: 5px;
+}
+
+#userSubmit {
     margin: 5px;
 }
